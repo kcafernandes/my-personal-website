@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kesia — robotics engineer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2308090F'/%3E%3Cfilter id='glow'%3E%3CfeGaussianBlur stdDeviation='1.5' result='blur'/%3E%3CfeMerge%3E%3CfeMergeNode in='blur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-weight='700' font-size='20' fill='%234DD9CC' filter='url(%23glow)'%3Ek%3C/text%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyan:    '#4DD9CC',
+            magenta: '#FF2D7A',
+            orange:  '#FF5C35',
+            base:    '#08090F',
+            surface: '#0D0E1C',
+            card:    '#111228',
+            border:  '#1A1E3A',
+            'text-primary':   '#E8EAF0',
+            'text-secondary': '#6B7299',
+          },
+          fontFamily: {
+            mono: ['Roboto Mono', 'monospace'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="bg-atmos">
+
+  <!-- ════════════════════════════════════════════
+       NAV
+  ════════════════════════════════════════════ -->
+  <nav class="fixed top-0 left-0 right-0 z-50" style="background: rgba(8,9,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,30,58,0.8);">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="#hero" class="font-mono text-xl font-bold tracking-tight glow-cyan" style="color: #4DD9CC;">
+        kesia
+      </a>
+
+      <!-- Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about"      class="nav-link font-mono text-xs tracking-widest uppercase">about</a>
+        <a href="#skills"     class="nav-link font-mono text-xs tracking-widest uppercase">skills</a>
+        <a href="#experience" class="nav-link font-mono text-xs tracking-widest uppercase">experience</a>
+        <a href="#projects"   class="nav-link font-mono text-xs tracking-widest uppercase">projects</a>
+        <a href="#contact"    class="nav-link font-mono text-xs tracking-widest uppercase">contact</a>
+      </div>
+
+      <!-- Status pill -->
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-sm" style="background: rgba(77,217,204,0.08); border: 1px solid rgba(77,217,204,0.2);">
+        <span class="w-2 h-2 rounded-full" style="background: #4DD9CC; box-shadow: 0 0 6px #4DD9CC; animation: blink 2s step-end infinite;"></span>
+        <span class="font-mono text-xs" style="color: #4DD9CC;">available for internships</span>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ════════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════ -->
+  <section id="hero" class="circuit-bg relative min-h-screen flex items-center pt-16">
+
+    <!-- Dotted surface background -->
+    <div id="dotted-surface" class="absolute inset-0 pointer-events-none overflow-hidden" style="z-index:0;"></div>
+
+    <!-- Decorative corner lines -->
+    <div class="absolute top-24 left-6 w-16 h-16 pointer-events-none" style="border-top: 1px solid rgba(77,217,204,0.3); border-left: 1px solid rgba(77,217,204,0.3);"></div>
+    <div class="absolute top-24 right-6 w-16 h-16 pointer-events-none" style="border-top: 1px solid rgba(255,45,122,0.3); border-right: 1px solid rgba(255,45,122,0.3);"></div>
+    <div class="absolute bottom-12 left-6 w-16 h-16 pointer-events-none" style="border-bottom: 1px solid rgba(77,217,204,0.2); border-left: 1px solid rgba(77,217,204,0.2);"></div>
+    <div class="absolute bottom-12 right-6 w-16 h-16 pointer-events-none" style="border-bottom: 1px solid rgba(255,45,122,0.2); border-right: 1px solid rgba(255,45,122,0.2);"></div>
+
+    <div class="max-w-6xl mx-auto px-6 py-24 w-full">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+        <!-- LEFT: Text content -->
+        <div class="flex-1 min-w-0">
+
+          <!-- Label -->
+          <div class="section-label mb-6 flex items-center gap-3">
+            <span style="display:inline-block; width:32px; height:1px; background:#4DD9CC;"></span>
+            system.init — robotics_engineer.exe
+          </div>
+
+          <!-- Main heading -->
+          <h1 class="font-mono font-bold leading-none mb-6 glitch" data-text="hey, it's kesia"
+              style="font-size: clamp(2.6rem, 5.5vw, 5rem); letter-spacing: -0.02em; color: #E8EAF0; white-space: nowrap;">
+            hey, it's <span class="glow-cyan" style="color:#4DD9CC;">kesia</span><span class="cursor" style="color:#4DD9CC;"></span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="font-sans font-light mb-10 max-w-xl" style="font-size: clamp(1.2rem, 2.2vw, 1.5rem); color: #6B7299; line-height: 1.7;">
+            i think <span style="color:#FF2D7A;">robots</span> are cool
+          </p>
+
+          <!-- Terminal snippet -->
+          <div class="terminal mb-10" style="max-width:30rem;">
+            <div class="terminal-bar">
+              <div class="terminal-dot" style="background:#FF5C35;"></div>
+              <div class="terminal-dot" style="background:#4DD9CC; opacity:0.5;"></div>
+              <div class="terminal-dot" style="background:#4DD9CC;"></div>
+              <span class="ml-2 font-mono text-xs" style="color:#6B7299;">~/kesia — zsh</span>
+            </div>
+            <div class="p-4 space-y-1.5">
+              <p><span style="color:#4DD9CC;">~</span> <span style="color:#6B7299;">$</span> <span style="color:#E8EAF0;">whoami</span></p>
+              <p style="color:#6B7299;">kesia fernandes — B.S. Robotics Eng + Data Science, UCR '28</p>
+              <p><span style="color:#4DD9CC;">~</span> <span style="color:#6B7299;">$</span> <span style="color:#E8EAF0;">cat interests.txt</span></p>
+              <p style="color:#6B7299;">autonomous systems, computer vision, embedded systems, hardware-software integration</p>
+              <p><span style="color:#4DD9CC;">~</span> <span style="color:#6B7299;">$</span> <span class="cursor" style="color:#4DD9CC;"></span></p>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-wrap gap-4">
+            <button class="btn-cyan" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+              view projects
+            </button>
+            <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+              get in touch
+            </button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Particle BB-8 -->
+        <div class="hidden lg:flex flex-shrink-0 items-center justify-center" style="width:320px; height:370px;">
+          <canvas id="robotCanvas" style="cursor:crosshair;"></canvas>
+        </div>
+
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+        <span class="font-mono text-xs tracking-widest" style="color:#6B7299;">scroll</span>
+        <div style="width:1px; height:40px; background: linear-gradient(to bottom, #4DD9CC, transparent);"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       ABOUT
+  ════════════════════════════════════════════ -->
+  <section id="about" class="py-28 relative">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Text -->
+        <div class="fade-up">
+          <div class="section-label mb-5 flex items-center gap-3">
+            <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+            01 — about_me
+          </div>
+          <h2 class="font-mono font-bold mb-6" style="font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: -0.02em; color:#E8EAF0; line-height:1.2;">
+            building the <span style="color:#4DD9CC;">future</span>,<br/>one commit at a time.
+          </h2>
+          <div class="space-y-4 font-sans font-light" style="color:#8B90B8; line-height:1.8; font-size:0.95rem;">
+            <p>
+              I’m a robotics engineering student at UC Riverside with a minor in Data Science. 
+              I’m interested in intelligent systems and enjoy building software that brings machines
+              to life in the real world.
+            <p>
+              Some of my experience includes <span style="color:#4DD9CC;">building a vision-guided robotic arm</span> 
+              using <span style="color:#4DD9CC;">YOLOv8</span> and <span style="color:#4DD9CC;">OpenCV</span>, as well 
+              as implementing autonomous navigation behaviors in ROS2 simulations.
+              Right now I’m focused on learning the fundamentals of <span style="color:#FF2D7A;">ROS2</span> and improving 
+              my  <span style="color:#FF2D7A;">Python</span> skills by playing around in Gazebo. 
+            </p>
+            <p>
+              Outside of robotics, I enjoy playing FPS games, reading manga, hiking,  
+              and doing anything that lets me indulge my creativity.
+              <span style="color:#ff901c;">I love to make stuff!!!!!</span>
+            </p>
+          </div>
+
+          <!-- Stats row -->
+          <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="card hover-cyan p-4 rounded-sm text-center">
+              <div class="font-mono font-bold text-2xl glow-cyan" style="color:#4DD9CC;">3.8</div>
+              <div class="font-mono text-xs mt-1" style="color:#6B7299; letter-spacing:0.1em;">GPA</div>
+            </div>
+            <div class="card hover-magenta p-4 rounded-sm text-center">
+              <div class="font-mono font-bold text-2xl glow-magenta" style="color:#FF2D7A;">UCR</div>
+              <div class="font-mono text-xs mt-1" style="color:#6B7299; letter-spacing:0.1em;">class of '28</div>
+            </div>
+            <div class="card hover-orange p-4 rounded-sm text-center">
+              <div class="font-mono font-bold text-2xl glow-orange" style="color:#FF5C35;">2+</div>
+              <div class="font-mono text-xs mt-1" style="color:#6B7299; letter-spacing:0.1em;">yrs robotics</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image placeholder card -->
+        <div class="fade-up relative">
+          <!-- Decorative offset border -->
+          <div class="absolute -top-4 -left-4 w-full h-full rounded-sm" style="border: 1px solid rgba(77,217,204,0.2);"></div>
+          <div class="relative rounded-sm overflow-hidden" style="border: 1px solid #1A1E3A;">
+            <img src="brand_assets/meanddad.png" alt="kesia" class="w-full object-cover" style="mix-blend-mode: luminosity; filter: contrast(1.05) brightness(0.9);" />
+            <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(77,217,204,0.08) 0%, transparent 60%, rgba(255,45,122,0.06) 100%);"></div>
+            <!-- Corner accent -->
+            <div class="absolute bottom-4 right-4 font-mono text-xs" style="color:#4DD9CC; opacity:0.6; letter-spacing:0.15em;">UCR // robotics eng '28</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       SKILLS
+  ════════════════════════════════════════════ -->
+  <section id="skills" class="py-28 circuit-bg relative" style="background-color: #0D0E1C;">
+    <!-- Top/bottom edge fades -->
+    <div class="absolute top-0 left-0 right-0 h-20" style="background: linear-gradient(to bottom, #08090F, transparent);"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-20" style="background: linear-gradient(to top, #08090F, transparent);"></div>
+
+    <div class="max-w-6xl mx-auto px-6 relative">
+      <div class="text-center mb-16 fade-up">
+        <div class="section-label mb-4 justify-center flex items-center gap-3">
+          <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+          02 — tech_stack
+          <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+        </div>
+        <h2 class="font-mono font-bold" style="font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing:-0.02em;">
+          my tech arsenal
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10 mb-16">
+
+        <!-- Skill group: Languages & Robotics -->
+        <div class="fade-up">
+          <h3 class="font-mono text-xs tracking-widest uppercase mb-6" style="color:#4DD9CC;">
+            // languages &amp; robotics
+          </h3>
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">Python</span>
+                <span class="font-mono text-xs" style="color:#4DD9CC;">familiar</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:45%; background: linear-gradient(90deg, #4DD9CC, #2BB5A8);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">C++</span>
+                <span class="font-mono text-xs" style="color:#4DD9CC;">proficient</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:80%; background: linear-gradient(90deg, #4DD9CC, #2BB5A8);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">ROS 2</span>
+                <span class="font-mono text-xs" style="color:#4DD9CC;">learning</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:30%; background: linear-gradient(90deg, #4DD9CC, #2BB5A8);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">OpenCV / YOLOv8</span>
+                <span class="font-mono text-xs" style="color:#FF2D7A;">familiar</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:40%; background: linear-gradient(90deg, #FF2D7A, #C42060);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">Java / JavaScript</span>
+                <span class="font-mono text-xs" style="color:#FF2D7A;">proficient</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:60%; background: linear-gradient(90deg, #FF2D7A, #C42060);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skill group: Hardware & Tools -->
+        <div class="fade-up">
+          <h3 class="font-mono text-xs tracking-widest uppercase mb-6" style="color:#FF5C35;">
+            // hardware &amp; tooling
+          </h3>
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">Arduino / Raspberry Pi</span>
+                <span class="font-mono text-xs" style="color:#FF5C35;">learning</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:30%; background: linear-gradient(90deg, #FF5C35, #CC3D1A);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">SolidWorks / CAD</span>
+                <span class="font-mono text-xs" style="color:#FF5C35;">proficient</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:75%; background: linear-gradient(90deg, #FF5C35, #CC3D1A);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">Git / GitHub / Linux</span>
+                <span class="font-mono text-xs" style="color:#FF5C35;">proficient</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:65%; background: linear-gradient(90deg, #FF5C35, #CC3D1A);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">pandas / NumPy</span>
+                <span class="font-mono text-xs" style="color:#4DD9CC;">familiar</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:49%; background: linear-gradient(90deg, #4DD9CC, #2BB5A8);"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-mono text-sm" style="color:#E8EAF0;">GoogleTest / Valgrind / PyTest</span>
+                <span class="font-mono text-xs" style="color:#4DD9CC;">familiar</span>
+              </div>
+              <div class="h-1.5 rounded-sm overflow-hidden" style="background:#1A1E3A;">
+                <div class="skill-bar-fill rounded-sm" style="width:40%; background: linear-gradient(90deg, #4DD9CC, #2BB5A8);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech tag cloud -->
+      <div class="fade-up flex flex-wrap gap-2 justify-center">
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">Python</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">C++</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">Java</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">JavaScript</span>
+        <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.2);">ROS2</span>
+        <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.2);">OpenCV</span>
+        <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.2);">YOLOv8</span>
+        <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.2);">Arduino</span>
+        <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.2);">Raspberry Pi</span>
+        <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.2);">SolidWorks</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">pandas</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">NumPy</span>
+        <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.2);">GoogleTest</span>
+        <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.2);">Valgrind</span>
+        <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.2);">Git / GitHub</span>
+        <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.2);">Linux / Ubuntu</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">Azure DevOps</span>
+        <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.2);">Agile / Scrum</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       EXPERIENCE
+  ════════════════════════════════════════════ -->
+  <section id="experience" class="py-28 relative">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="fade-up mb-14">
+        <div class="section-label mb-4 flex items-center gap-3">
+          <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+          03 — experience
+        </div>
+        <h2 class="font-mono font-bold" style="font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing:-0.02em;">
+          roles & experience
+        </h2>
+      </div>
+
+      <div class="space-y-6">
+
+        <!-- ACM Forge -->
+        <div class="card hover-cyan rounded-sm p-6 fade-up">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+            <div>
+              <div class="font-mono font-bold text-base" style="color:#E8EAF0;">Software Developer</div>
+              <div class="font-mono text-sm mt-0.5" style="color:#4DD9CC;">ACM Forge — Association for Computing Machinery, UC Riverside</div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="font-mono text-xs" style="color:#6B7299;">Mar 2025 – Jun 2025</div>
+              <div class="font-mono text-xs mt-0.5" style="color:#6B7299;">Riverside, CA</div>
+            </div>
+          </div>
+          <ul class="space-y-2 font-sans font-light text-sm" style="color:#8B90B8; line-height:1.7;">
+            <li class="flex gap-3">
+              <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
+              Built and deployed a Python-based robotic arm system integrating computer vision and serial communication to control physical hardware in real time.
+            </li>
+            <li class="flex gap-3">
+              <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
+              Optimized the vision pipeline via multithreading, cutting system latency by <span style="color:#4DD9CC;">30%</span> on resource-constrained Raspberry Pi hardware.
+            </li>
+            <li class="flex gap-3">
+              <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
+              Collaborated hands-on with mechanical and electrical subteams to integrate, validate, and iterate on autonomous control systems through multiple test cycles.
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Python</span>
+            <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">OpenCV</span>
+            <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Raspberry Pi</span>
+            <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Multithreading</span>
+          </div>
+        </div>
+
+        <!-- VEX Robotics -->
+        <div class="card hover-orange rounded-sm p-6 fade-up">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+            <div>
+              <div class="font-mono font-bold text-base" style="color:#E8EAF0;">Technical Documentation Lead</div>
+              <div class="font-mono text-sm mt-0.5" style="color:#FF5C35;">VEX Robotics — Competitive Robotics Team</div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="font-mono text-xs" style="color:#6B7299;">Jun 2022 – Apr 2024</div>
+              <div class="font-mono text-xs mt-0.5" style="color:#6B7299;">Fremont, CA</div>
+            </div>
+          </div>
+          <ul class="space-y-2 font-sans font-light text-sm" style="color:#8B90B8; line-height:1.7;">
+            <li class="flex gap-3">
+              <span style="color:#FF5C35; flex-shrink:0;">▸</span>
+              Authored engineering notebooks and SolidWorks CAD documentation covering hardware schematics, design iterations, and validation procedures across multiple build cycles.
+            </li>
+            <li class="flex gap-3">
+              <span style="color:#FF5C35; flex-shrink:0;">▸</span>
+              Coordinated software, mechanical, and manufacturing subteams to align design iteration, testing, and competition deliverables on tight timelines.
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">SolidWorks</span>
+            <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">CAD</span>
+            <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">Technical Writing</span>
+          </div>
+        </div>
+
+        <!-- FCSN Volunteer -->
+        <div class="card hover-magenta rounded-sm p-6 fade-up">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+            <div>
+              <div class="font-mono font-bold text-base" style="color:#E8EAF0;">Robotics Instructor <span class="font-light" style="color:#6B7299;">(Volunteer)</span></div>
+              <div class="font-mono text-sm mt-0.5" style="color:#FF2D7A;">Friends of Children with Special Needs — FCSN Youth Program</div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="font-mono text-xs" style="color:#6B7299;">Jun 2022 – Jun 2024</div>
+              <div class="font-mono text-xs mt-0.5" style="color:#6B7299;">San Jose, CA</div>
+            </div>
+          </div>
+          <ul class="space-y-2 font-sans font-light text-sm" style="color:#8B90B8; line-height:1.7;">
+            <li class="flex gap-3">
+              <span style="color:#FF2D7A; flex-shrink:0;">▸</span>
+              Designed and delivered hands-on robotics curriculum using LEGO WeDo and Scratch for students with special needs.
+            </li>
+            <li class="flex gap-3">
+              <span style="color:#FF2D7A; flex-shrink:0;">▸</span>
+              Created sensor-based and event-driven programming lessons, improving student engagement and foundational CS comprehension.
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">LEGO WeDo</span>
+            <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Scratch</span>
+            <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Curriculum Design</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       PROJECTS
+  ════════════════════════════════════════════ -->
+  <section id="projects" class="py-28 relative overflow-hidden">
+    <canvas id="wavy-canvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+    <div class="max-w-6xl mx-auto px-6 relative" style="z-index:1;">
+
+      <div class="flex items-end justify-between mb-14">
+        <div class="fade-up">
+          <div class="section-label mb-4 flex items-center gap-3">
+            <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+            04 — projects
+          </div>
+          <h2 class="font-mono font-bold" style="font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing:-0.02em;">
+            some of my work
+          </h2>
+        </div>
+        <a href="#" class="hidden md:block font-mono text-xs tracking-widest uppercase" style="color:#4DD9CC;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+          view all →
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Project 1 — Autonomous Robot Navigation (wider, featured) -->
+        <article class="card hover-cyan rounded-sm overflow-hidden fade-up md:col-span-2">
+          <div class="flex flex-col sm:flex-row">
+            <div class="proj-img-wrap sm:w-72 flex-shrink-0 h-44 sm:h-auto">
+              <img src="brand_assets/turtlebot.png" alt="Autonomous Robot Navigation" class="w-full h-full object-cover object-center" />
+            </div>
+            <div class="p-5 flex flex-col justify-center">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-mono text-xs tracking-widest uppercase" style="color:#4DD9CC;">autonomous navigation</div>
+                <span class="font-mono text-xs" style="color:#4DD9CC; background:rgba(77,217,204,0.1); border:1px solid rgba(77,217,204,0.2); padding:2px 8px; border-radius:2px;">in progress</span>
+              </div>
+              <h3 class="font-mono font-bold text-base mb-2" style="color:#E8EAF0;">autonomous robot navigation</h3>
+              <p class="font-sans font-light text-sm mb-4" style="color:#6B7299; line-height:1.7;">
+                Implemented wall-following and trajectory generation behaviors for a simulated robot using ROS2 nodes, topics, and publishers/subscribers in a Linux environment. Continuing to build familiarity with autonomous navigation stacks and sensor integration.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">ROS 2</span>
+                <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Python</span>
+                <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Linux / Ubuntu</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 — Autonomous Robotic Arm -->
+        <article class="card hover-magenta rounded-sm overflow-hidden fade-up" style="cursor:pointer;" onclick="window.open('https://github.com/acm-ucr/Arms','_blank')">
+          <div class="proj-img-wrap h-44">
+            <img src="brand_assets/robotikarm.jpg" alt="Autonomous Robotic Arm" class="w-full h-full object-cover object-center" />
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-mono text-xs tracking-widest uppercase" style="color:#FF2D7A;">computer vision</div>
+              <svg class="w-4 h-4" style="color:#FF2D7A;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </div>
+            <h3 class="font-mono font-bold text-base mb-2" style="color:#E8EAF0;">autonomous robotic arm</h3>
+            <p class="font-sans font-light text-sm mb-4" style="color:#6B7299; line-height:1.7;">
+              Designed, built, and deployed a vision-guided robotic arm using YOLOv8 and OpenCV for real-time object detection and physical manipulation. Collaborated with mechanical and electrical engineers on CAD design and hardware integration.
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Python</span>
+              <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">YOLOv8</span>
+              <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">OpenCV</span>
+              <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Raspberry Pi</span>
+              <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Arduino</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 — Text-Based Mystery RPG -->
+        <article class="card hover-orange rounded-sm overflow-hidden fade-up md:col-span-2" style="cursor:pointer;" onclick="window.open('https://github.com/kcafernandes/Grimshire-Manor-Murder?tab=readme-ov-file','_blank')">
+          <div class="flex flex-col sm:flex-row">
+            <div class="proj-img-wrap sm:w-72 flex-shrink-0 h-44 sm:h-auto">
+              <img src="brand_assets/grimshire.png" alt="Text-Based Mystery RPG" class="w-full h-full object-cover object-center" />
+            </div>
+            <div class="p-5 flex flex-col justify-center">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-mono text-xs tracking-widest uppercase" style="color:#FF5C35;">software engineering</div>
+              </div>
+              <h3 class="font-mono font-bold text-base mb-2" style="color:#E8EAF0;">text-based mystery RPG</h3>
+              <p class="font-sans font-light text-sm mb-4" style="color:#6B7299; line-height:1.7;">
+                Architected a C++ mystery game using OOP and SOLID principles. Validated correctness and eliminated memory leaks using GoogleTest and Valgrind.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">C++</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">OOP / SOLID</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">GoogleTest</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">Valgrind</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       CONTACT
+  ════════════════════════════════════════════ -->
+  <section id="contact" class="py-28 circuit-bg relative" style="background-color: #0D0E1C;">
+    <div class="absolute top-0 left-0 right-0 h-20" style="background: linear-gradient(to bottom, #08090F, transparent);"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-20" style="background: linear-gradient(to top, #08090F, transparent);"></div>
+
+    <div class="max-w-3xl mx-auto px-6 text-center relative fade-up">
+      <div class="section-label mb-5 justify-center flex items-center gap-3">
+        <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+        05 — contact
+        <span style="display:inline-block; width:24px; height:1px; background:#4DD9CC;"></span>
+      </div>
+
+      <h2 class="font-mono font-bold mb-6" style="font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing:-0.02em;">
+        let's build something<br/><span style="color:#4DD9CC;">together.</span>
+      </h2>
+
+      <p class="font-sans font-light mb-10" style="color:#6B7299; line-height:1.8; max-width:480px; margin-left:auto; margin-right:auto;">
+        open to internships, research, and interesting side projects. <br>
+        if you're working on something cool, let me know!
+      </p>
+
+      <!-- Contact card -->
+      <div class="card border-glow-cyan rounded-sm p-8 mb-8 text-left" style="max-width:480px; margin:0 auto 2rem;">
+        <div class="terminal-bar rounded-sm mb-4 -mx-8 -mt-8 px-4 py-3">
+          <div class="terminal-dot" style="background:#FF5C35;"></div>
+          <div class="terminal-dot" style="background:#4DD9CC; opacity:0.4;"></div>
+          <div class="terminal-dot" style="background:#4DD9CC;"></div>
+          <span class="ml-2 font-mono text-xs" style="color:#6B7299;">contact.sh</span>
+        </div>
+        <div class="space-y-3 font-mono text-sm">
+          <div class="flex items-center gap-3">
+            <span style="color:#4DD9CC;">→</span>
+            <span style="color:#6B7299;">email:</span>
+            <a href="mailto:kcafernandes06@gmail.com" class="nav-link" style="color:#E8EAF0;">kcafernandes06@gmail.com</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <span style="color:#4DD9CC;">→</span>
+            <span style="color:#6B7299;">github:</span>
+            <a href="https://github.com/kcafernandes" class="nav-link" style="color:#E8EAF0;" target="_blank" rel="noopener">@kcafernandes</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <span style="color:#4DD9CC;">→</span>
+            <span style="color:#6B7299;">linkedin:</span>
+            <a href="https://linkedin.com/in/kesia-fernandes" class="nav-link" style="color:#E8EAF0;" target="_blank" rel="noopener">/kesia-fernandes</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <span style="color:#4DD9CC;">→</span>
+            <span style="color:#6B7299;">phone:</span>
+            <a href="tel:5107704087" class="nav-link" style="color:#E8EAF0;">510-770-4087</a>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-cyan">send a message →</button>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="py-8" style="border-top: 1px solid #1A1E3A;">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <span class="font-mono text-sm glow-cyan" style="color:#4DD9CC;">kesia</span>
+      <span class="font-mono text-xs" style="color:#3B4068;">© 2026 — built and designed by Kesia Fernandes</span>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full" style="background:#4DD9CC; box-shadow:0 0 6px #4DD9CC;"></span>
+        <span class="font-mono text-xs" style="color:#3B4068;">all systems nominal</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ════════════════════════════════════════════
+       SCRIPTS
+  ════════════════════════════════════════════ -->
+  <script>
+    // Intersection Observer for fade-up animations
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Stagger siblings in same parent
+          const siblings = Array.from(entry.target.parentElement.querySelectorAll('.fade-up'));
+          const idx = siblings.indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, idx * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    fadeEls.forEach(el => observer.observe(el));
+
+    // Animate skill bars on scroll
+    const skillFills = document.querySelectorAll('.skill-bar-fill');
+    const skillObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const targetWidth = entry.target.style.width;
+          entry.target.style.width = '0%';
+          entry.target.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              entry.target.style.width = targetWidth;
+            });
+          });
+          skillObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    skillFills.forEach(el => skillObserver.observe(el));
+
+    // Nav active state on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = '#6B7299';
+          });
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.style.color = '#E8EAF0';
+        }
+      });
+    }, { threshold: 0.4 });
+    sections.forEach(s => scrollObserver.observe(s));
+
+    // ─────────────────────────────────────────────────
+    // PARTICLE ROBOT
+    // ─────────────────────────────────────────────────
+    (function () {
+      const canvas = document.getElementById('robotCanvas');
+      if (!canvas) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = 320, H = 370;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      // ── Draw robot on offscreen canvas ────────────────
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const oc = off.getContext('2d');
+
+      function rr(x, y, w, h, r) {
+        oc.beginPath();
+        oc.moveTo(x + r, y);
+        oc.lineTo(x + w - r, y);
+        oc.quadraticCurveTo(x + w, y, x + w, y + r);
+        oc.lineTo(x + w, y + h - r);
+        oc.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        oc.lineTo(x + r, y + h);
+        oc.quadraticCurveTo(x, y + h, x, y + h - r);
+        oc.lineTo(x, y + r);
+        oc.quadraticCurveTo(x, y, x + r, y);
+        oc.closePath();
+        oc.fill();
+      }
+
+      oc.fillStyle = '#fff';
+      const cx = 160;
+
+      // Antenna ball + stem
+      oc.beginPath(); oc.arc(cx, 20, 14, 0, Math.PI * 2); oc.fill();
+      rr(152, 32, 16, 24, 4);
+
+      // Head (boxy, rounded corners)
+      rr(75, 54, 170, 118, 20);
+
+      // Ear panels
+      rr(53, 78, 24, 54, 6);
+      rr(243, 78, 24, 54, 6);
+
+      // Eyes
+      oc.beginPath(); oc.arc(118, 106, 24, 0, Math.PI * 2); oc.fill();
+      oc.beginPath(); oc.arc(202, 106, 24, 0, Math.PI * 2); oc.fill();
+
+      // Mouth bar
+      rr(112, 144, 96, 20, 10);
+
+      // Neck
+      rr(136, 174, 28, 20, 5);
+
+      // Torso
+      rr(84, 194, 152, 106, 14);
+
+      // Chest panel
+      rr(116, 212, 88, 56, 8);
+
+      // Arms
+      rr(46, 200, 40, 74, 10);
+      rr(234, 200, 40, 74, 10);
+
+      // Hands
+      oc.beginPath(); oc.arc(66, 282, 16, 0, Math.PI * 2); oc.fill();
+      oc.beginPath(); oc.arc(254, 282, 16, 0, Math.PI * 2); oc.fill();
+
+      // Legs
+      rr(104, 298, 48, 52, 9);
+      rr(168, 298, 48, 52, 9);
+
+      // Feet
+      rr(96, 344, 60, 16, 6);
+      rr(164, 344, 60, 16, 6);
+
+      // ── Sample pixels → particles ─────────────────────
+      const GAP = 4;
+      const data = oc.getImageData(0, 0, W, H).data;
+      const particles = [];
+
+      function classify(x, y) {
+        // Eyes → magenta
+        if ((x-118)**2 + (y-106)**2 <= 24*24) return 'M';
+        if ((x-202)**2 + (y-106)**2 <= 24*24) return 'M';
+        // Antenna ball → orange
+        if ((x-cx)**2  + (y-20)**2  <= 14*14) return 'O';
+        // Antenna stem → orange
+        if (x >= 152 && x <= 168 && y >= 32 && y <= 56) return 'O';
+        // Chest panel → orange
+        if (x >= 116 && x <= 204 && y >= 212 && y <= 268) return 'O';
+        return 'C';
+      }
+
+      for (let y = 0; y < H; y += GAP) {
+        for (let x = 0; x < W; x += GAP) {
+          if (data[(y * W + x) * 4 + 3] < 128) continue;
+          const jx = x + (Math.random() - 0.5) * GAP * 0.5;
+          const jy = y + (Math.random() - 0.5) * GAP * 0.5;
+          particles.push({
+            x: jx, y: jy, ox: jx, oy: jy, vx: 0, vy: 0,
+            r: 0.9 + Math.random() * 0.65,
+            baseOpacity: 0.45 + Math.random() * 0.45,
+            t: classify(x, y),
+          });
+        }
+      }
+
+      // ── Mouse ─────────────────────────────────────────
+      const mouse = { x: -9999, y: -9999 };
+      canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+      canvas.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+      // ── Physics ───────────────────────────────────────
+      const REPEL_R = 65, REPEL_R2 = 65 * 65, REPEL_F = 5.5;
+      const SPRING = 0.072, DAMP = 0.80;
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (const p of particles) {
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < REPEL_R2) {
+            const d = Math.sqrt(d2), f = (REPEL_R - d) / REPEL_R;
+            p.vx += dx / (d || 1) * f * REPEL_F;
+            p.vy += dy / (d || 1) * f * REPEL_F;
+          }
+          p.vx += (p.ox - p.x) * SPRING;
+          p.vy += (p.oy - p.y) * SPRING;
+          p.vx *= DAMP; p.vy *= DAMP;
+          p.x += p.vx; p.y += p.vy;
+
+          const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          const op  = Math.min(p.baseOpacity + Math.min(spd * 0.08, 0.4), 1);
+
+          ctx.fillStyle = p.t === 'M' ? `rgba(255,45,122,${op})`
+                        : p.t === 'O' ? `rgba(255,144,28,${op})`
+                        :               `rgba(77,217,204,${op})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r + spd * 0.10, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      // Scatter on load then assemble
+      for (const p of particles) {
+        p.x = p.ox + (Math.random() - 0.5) * 280;
+        p.y = p.oy + (Math.random() - 0.5) * 280;
+        p.vx = (Math.random() - 0.5) * 5;
+        p.vy = (Math.random() - 0.5) * 5;
+      }
+      draw();
+    })();
+
+    // ── Wavy Background (projects section) ───────────────────────────
+    (function() {
+      const canvas = document.getElementById('wavy-canvas');
+      if (!canvas || typeof SimplexNoise === 'undefined') return;
+
+      const ctx = canvas.getContext('2d');
+      const simplex = new SimplexNoise();
+      const section = document.getElementById('projects');
+
+      const waveColors = ['#FF2D7A', '#4DD9CC', '#FF5C35', '#FF2D7A', '#4DD9CC'];
+      const waveWidth  = 50;
+      const blur       = 8;
+      const waveOpacity = 0.4;
+      const speed      = 0.003;
+      let nt = 0, animId;
+
+      function resize() {
+        canvas.width  = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+        ctx.filter = `blur(${blur}px)`;
+      }
+
+      function drawWave(n) {
+        nt += speed;
+        for (let i = 0; i < n; i++) {
+          ctx.beginPath();
+          ctx.lineWidth   = waveWidth;
+          ctx.strokeStyle = waveColors[i % waveColors.length];
+          for (let x = -200; x < canvas.width + 200; x += 5) {
+            const y = simplex.noise3D(x / 800, 0.3 * i, nt) * 100;
+            ctx.lineTo(x, y + canvas.height * 0.5);
+          }
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = waveOpacity;
+        drawWave(5);
+        ctx.globalAlpha = 1;
+        animId = requestAnimationFrame(render);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      render();
+    })();
+
+    // ── Dotted Surface (Three.js wave) ───────────────────────────────
+    (function() {
+      const container = document.getElementById('dotted-surface');
+      if (!container || typeof THREE === 'undefined') return;
+
+      const SEPARATION = 150, AMOUNTX = 40, AMOUNTY = 60;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 1, 10000);
+      camera.position.set(0, 355, 1220);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setClearColor(0x000000, 0);
+      container.appendChild(renderer.domElement);
+
+      const positions = [], colors = [];
+      for (let ix = 0; ix < AMOUNTX; ix++) {
+        for (let iy = 0; iy < AMOUNTY; iy++) {
+          positions.push(ix * SEPARATION - (AMOUNTX * SEPARATION) / 2, 0, iy * SEPARATION - (AMOUNTY * SEPARATION) / 2);
+          // Magenta brand color (#FF2D7A → r:1.0 g:0.176 b:0.478 normalised)
+          colors.push(1.0, 0.176, 0.478);
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({ size: 9, vertexColors: true, transparent: true, opacity: 0.6, sizeAttenuation: true });
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+
+      let count = 0;
+      const posAttr = geometry.attributes.position;
+      const pos = posAttr.array;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        let i = 0;
+        for (let ix = 0; ix < AMOUNTX; ix++) {
+          for (let iy = 0; iy < AMOUNTY; iy++) {
+            pos[i * 3 + 1] = Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
+            i++;
+          }
+        }
+        posAttr.needsUpdate = true;
+        renderer.render(scene, camera);
+        count += 0.03;
+      }
+
+      window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+
+      animate();
+    })();
+
+  </script>
+</body>
+</html>
