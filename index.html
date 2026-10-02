@@ -408,16 +408,14 @@
           <ul class="space-y-2 font-sans font-light text-sm" style="color:#8B90B8; line-height:1.7;">
             <li class="flex gap-3">
               <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
-              Built and deployed a Python-based robotic arm system integrating computer vision and serial communication to control physical hardware in real time.
+              Programmed a Python perception-control pipeline that streamed video from a Raspberry Pi camera and used YOLOv8/OpenCV to detect apples, bananas, and oranges in real time.
             </li>
             <li class="flex gap-3">
               <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
-              Optimized the vision pipeline via multithreading, cutting system latency by <span style="color:#4DD9CC;">30%</span> on resource-constrained Raspberry Pi hardware.
-            </li>
+              Replaced a sequential vision loop causing 5–6 seconds of delay with three concurrent capture, inference, and display threads using bounded queues and frame skipping, reducing latency by approximately 30%.            </li>
             <li class="flex gap-3">
               <span style="color:#4DD9CC; flex-shrink:0;">▸</span>
-              Collaborated hands-on with mechanical and electrical subteams to integrate, validate, and iterate on autonomous control systems through multiple test cycles.
-            </li>
+              Developed and tested a PySerial protocol using virtual COM ports and USB hardware to convert detected fruit classes into integer commands for the electrical team’s Arduino Nano arm controller.            </li>
           </ul>
           <div class="flex flex-wrap gap-1.5 mt-4">
             <span class="tag" style="background:rgba(77,217,204,0.1); color:#4DD9CC; border:1px solid rgba(77,217,204,0.15);">Python</span>
@@ -549,7 +547,7 @@
             </div>
             <h3 class="font-mono font-bold text-base mb-2" style="color:#E8EAF0;">autonomous robotic arm</h3>
             <p class="font-sans font-light text-sm mb-4" style="color:#6B7299; line-height:1.7;">
-              Built and deployed a vision-guided robotic arm using YOLOv8 and OpenCV for real-time object detection and physical manipulation. Collaborated with mechanical and electrical engineers on CAD design and hardware integration.
+              Developed an end-to-end perception-and-control system using Python, YOLOv8, and OpenCV to detect objects and trigger robotic-arm actions. Integrated Raspberry Pi–Arduino Nano serial communication and a multithreaded capture, inference, and control pipeline.
             </p>
             <div class="flex flex-wrap gap-1.5">
               <span class="tag" style="background:rgba(255,45,122,0.1); color:#FF2D7A; border:1px solid rgba(255,45,122,0.15);">Python</span>
@@ -607,6 +605,79 @@
         </article>
 
       </div>
+
+      <!-- Currently building — Scotty Scope -->
+      <div class="mt-20">
+        <div class="section-label mb-6 flex items-center gap-3 fade-up" style="color:#FF5C35;">
+          <span class="wip-dot"></span>
+          currently building
+          <span style="flex:1; height:1px; background:linear-gradient(90deg, rgba(255,92,53,0.4), transparent);"></span>
+        </div>
+
+        <article class="card hover-orange wip-card rounded-sm overflow-hidden fade-up" style="cursor:pointer;" onclick="window.open('https://github.com/kcafernandes/scotty-scope','_blank')">
+          <div class="grid md:grid-cols-2">
+
+            <!-- Preview -->
+            <div class="wip-stage flex items-center p-6 md:p-8">
+              <div class="wip-frame">
+                <div class="terminal-bar" style="border-radius:0;">
+                  <span class="terminal-dot" style="background:#FF2D7A;"></span>
+                  <span class="terminal-dot" style="background:#FF5C35;"></span>
+                  <span class="terminal-dot" style="background:#4DD9CC;"></span>
+                  <span class="font-mono ml-2" style="font-size:0.65rem; letter-spacing:0.08em; color:#6B7299;">scotty-scope</span>
+                </div>
+                <div class="wip-shot">
+                  <img src="brand_assets/scottyscope.png" alt="Scotty Scope course search page" width="1512" height="795" class="block w-full h-auto" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-mono text-xs tracking-widest uppercase" style="color:#FF5C35;">full-stack · web</div>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">in active development</span>
+              </div>
+              <h3 class="font-mono font-bold text-xl mb-2" style="color:#E8EAF0; letter-spacing:-0.02em;">Scotty Scope</h3>
+              <p class="font-sans font-light text-sm mb-6" style="color:#6B7299; line-height:1.7;">
+                A UCR-specific course intelligence site that brings course info, professors, historical offerings, prerequisites, ratings, and student feedback into one place, so registration research no longer means juggling the catalog, degree audit, Reddit, and Rate My Professors.
+              </p>
+
+              <ul class="space-y-3 mb-6 font-sans font-light text-sm" style="color:#8B90B8; line-height:1.7;">
+                <li class="flex gap-3">
+                  <span class="font-mono" style="color:#4DD9CC; flex-shrink:0;">✓</span>
+                  <span><span class="font-mono text-xs" style="color:#E8EAF0;">frontend skeleton</span> — search flow, results page, course page</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-mono" style="color:#4DD9CC; flex-shrink:0;">✓</span>
+                  <span><span class="font-mono text-xs" style="color:#E8EAF0;">backend skeleton</span> — FastAPI routes, connected to the frontend</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-mono" style="color:#FF5C35; flex-shrink:0;">▸</span>
+                  <span><span class="font-mono text-xs" style="color:#FF5C35;">database integration</span> — PostgreSQL and SQLAlchemy models in place, migrating from mock data to real queries</span>
+                </li>
+              </ul>
+
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">React</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">Vite</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">FastAPI</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">Python</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">PostgreSQL</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">SQLAlchemy</span>
+                <span class="tag" style="background:rgba(255,92,53,0.1); color:#FF5C35; border:1px solid rgba(255,92,53,0.15);">Docker</span>
+              </div>
+
+              <a href="https://github.com/kcafernandes/scotty-scope" target="_blank" rel="noopener" class="wip-link font-mono text-xs tracking-widest uppercase" onclick="event.stopPropagation()">
+                follow along on github
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </div>
+
+          </div>
+        </article>
+      </div>
+
     </div>
   </section>
 

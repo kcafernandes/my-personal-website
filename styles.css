@@ -299,3 +299,87 @@ body::after {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ─── Currently Building ─────────────────────── */
+.wip-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #FF5C35;
+  box-shadow: 0 0 6px #FF5C35;
+  flex-shrink: 0;
+}
+.wip-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid #FF5C35;
+  animation: wip-ping 2s cubic-bezier(0.16,1,0.3,1) infinite;
+}
+@keyframes wip-ping {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+
+.wip-stage {
+  position: relative;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 10%, rgba(255,92,53,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 90% 95%, rgba(77,217,204,0.10) 0%, transparent 70%),
+    linear-gradient(rgba(255,92,53,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,92,53,0.05) 1px, transparent 1px),
+    #0D0E1C;
+  background-size: auto, auto, 32px 32px, 32px 32px, auto;
+}
+.wip-frame {
+  position: relative;
+  width: 100%;
+  border: 1px solid #1A1E3A;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #08090F;
+  box-shadow:
+    0 2px 4px rgba(8,9,15,0.5),
+    0 12px 28px rgba(8,9,15,0.55),
+    0 28px 64px rgba(255,92,53,0.10);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.card:hover .wip-frame { transform: translateY(-3px) scale(1.015); }
+.wip-shot { position: relative; }
+.wip-shot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,92,53,0.05);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.wip-shot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8,9,15,0.3), transparent 45%);
+  pointer-events: none;
+}
+
+.wip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #FF5C35;
+  border-radius: 2px;
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
+}
+.wip-link:hover { transform: translateX(4px); }
+.wip-link:active { transform: translateX(1px); opacity: 0.7; }
+.wip-link:focus-visible,
+.wip-card:focus-visible {
+  outline: 1px solid #FF5C35;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wip-dot::after { animation: none; }
+}
